@@ -1,0 +1,28 @@
+#Homework Assignment
+
+
+to extend the authenticate process in this project, create a user profile.
+And add these fields to the profile model:
+1st step:
+
+1- user
+# Hint! user must be extended from built-in user model
+2- short intro, e.g Full Stack web developer
+3- bio
+4- country
+5- city
+6- date of created account
+
+2end step:
+1- create CRUD views for user profile except no create view.
+
+3rd step:
+1- display the user profile information, delete and update in the same template.
+
+
+fourth step:
+#extra! add social media icons with link that take to your social media account on navbar such twitter, facebook, github and etc.
+ 
+----Good luck----
+
+

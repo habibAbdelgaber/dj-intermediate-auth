@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-
+from .models import Profile
 
 
 class UserRegistrationForm(UserCreationForm):
@@ -20,3 +20,8 @@ class UserRegistrationForm(UserCreationForm):
         if created['password2'] != created['password1']:
             raise forms.ValidationError('Passwords do not match!')
 
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['short_intro', 'bio_content', 'country', 'city', 'date_joined']

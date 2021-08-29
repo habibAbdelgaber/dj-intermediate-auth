@@ -3,14 +3,61 @@ from django.contrib import messages
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
-from .forms import UserRegistrationForm
 
+from .models import Profile
+from .forms import UserRegistrationForm, ProfileForm
+
+# USER VIEWS
 def home(request):
     return render(request, 'home.html')
 
 
+def detail(request):
+    profile = Profile.objects.all()
+    update_profile = Profile.objects.get()
+    form = ProfileForm(request.POST)
+    if request.method == 'POST':
+        form = ProfileForm(request.POST or None, instance=update_profile)
+        if form.is_valid():
+            user_profile = form.save(commit=False)
+            user_profile.user = request.user
+            user_profile.save()
+            messages.success(request, 'You have updated your profile!')
+            return redirect('detail')
+    elif request.method == "GET":
+        form = ProfileForm(request.POST or None, instance=update_profile)
+
+    # context = {'form': form}
+    context = {
+        'profile': profile,
+        'update_profile': update_profile,
+        'form': form
+        }
+    return render(request, 'accounts/detail.html', context)
+
+
+# def update(request, pk):
+#     profile = Profile.objects.get(id=pk)
+#     form = ProfileForm(request.POST, instance=profile)
+#     if request.method == 'POST':
+#         form = ProfileForm(request.POST or None, instance=profile)
+#         if form.is_valid():
+#             user_profile = form.save(commit=False)
+#             user_profile.user = request.user
+#             user_profile.save()
+#             messages.success(request, 'You have updated your profile!')
+#             return redirect('detail')
+#     elif request.method == "GET":
+#         form = ProfileForm(
+#             instance=profile)
+
+#     context = {'form': form}
+#     return render(request, 'accounts/detail.html', context)
+
+
+# AUTHENTICATION
 def signup(request):
-    form = UserRegistrationForm()
+    # form = UserRegistrationForm()
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST or None)
         if form.is_valid():
@@ -23,7 +70,7 @@ def signup(request):
     else:
         form = UserRegistrationForm(request.POST)
 
-    form = UserRegistrationForm()
+    # form = UserRegistrationForm()
     context = {'form': form}
     return render(request, 'accounts/signup.html', context)
 

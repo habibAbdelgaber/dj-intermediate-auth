@@ -3,38 +3,50 @@
 {% block content %}
 <div class="form-content"
     style="min-height: 70vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-    <div class="" style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+    <div class=""
+        style="display: flex; justify-content: center; align-items: center; flex-direction: column; font-family: 'Courier New', Courier, monospace;">
         <div class="row justify-content-cente">
             <div class="col-md-6">
-                <div class="card" style="width: 600px;">
+                <div class="card" style="width: 500px;">
                     <div class="card-header bg-dark">
-                        <h1 class="card-text text-center text-light"><span class="fa fa-user"></span> My Profile</h1>
+                        <h4 class="card-text text-center text-light"><span class="fa fa-user"></span> My Account</h4>
                     </div>
                     <div class="card-body p-4">
-                        {% for p in profile %}
                         <ul>
                             <li>
-                                <h4>Username: {{p.user.username}}</h4>
+                                <h4>Username: {{profile.user.username}}</h4>
                             </li>
                             <li>
-                                <h4>Email: {{p.user.email}}</h4>
+                                <h4>Email: {{profile.user.email}}</h4>
                             </li>
+                            {% if profile.short_intro %}
                             <li>
-                                <h4>Short intro: {{p.short_intro}}</h4>
+                                <h4>Short intro: {{profile.short_intro}}</h4>
                             </li>
+                            {% endif %}
+                            {% if profile.country %}
                             <li>
-                                <h4>Country: {{p.country}}, City: {{p.city}}</h4>
+                                <h4>Country: {{profile.country}} : City: {{profile.city}}</h4>
                             </li>
+                            {% endif %}
+                            {% if profile.city %}
+                            <li>
+                                <h4>City: {{profile.city}}</h4>
+                            </li>
+                            {% endif %}
+                            {% if profile.bio_content %}
                             <li>
                                 <h4>My Biography:</h4>
-                                <p>{{p.bio_content }}</p>
+                                <p>{{profile.bio_content }}</p>
                             </li>
+                            {% endif %}
                         </ul>
-                        <a href="{% url 'update-profile' %}" class="btn btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#exampleModal">
+                        <a href="{% url 'detail' pk=profile.id %}" class="btn btn-primary text-capitalize ms-3"
+                            data-bs-toggle="modal" data-bs-target="#exampleModal">
                             Update profile
-                        </a>
-                        {% endfor %}
+                            <a href="{% url 'delete' pk=profile.id %}" class="btn btn-danger text-capitalize ms-1">
+                                Deactivate account
+                            </a>
                     </div>
                 </div>
             </div>
@@ -55,7 +67,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{% url 'update-profile' %}" method='POST'>
+                <form action="{% url 'detail' pk=profile.id %}" method='POST'>
                     {% csrf_token %}
                     {{ form.as_p }}
                     <div class="d-grid">

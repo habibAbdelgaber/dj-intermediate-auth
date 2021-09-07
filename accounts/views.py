@@ -12,30 +12,34 @@ def home(request):
     return render(request, 'home.html')
 
 
-def detail(request):
-    profile = Profile.objects.all()
-    update_profile = Profile.objects.get()
-    form = ProfileForm(request.POST)
+def detail(request, pk):
+    profile = Profile.objects.get(id=pk)
+    form = ProfileForm(request.POST or None)
     if request.method == 'POST':
-        form = ProfileForm(request.POST or None, instance=update_profile)
+        form = ProfileForm(request.POST or None, instance=profile)
         if form.is_valid():
-            user_profile = form.save(commit=False)
-            user_profile.user = request.user
-            user_profile.save()
+            profile = form.save(commit=False)
+            profile.user = request.user
+            profile.save()
             messages.success(request, 'You have updated your profile!')
-            return redirect('detail')
+            return redirect('detail', request.user.id)
     elif request.method == "GET":
-        form = ProfileForm(request.POST or None, instance=update_profile)
+        form = ProfileForm(request.POST or None, instance=profile)
 
-    # context = {'form': form}
     context = {
         'profile': profile,
-        'update_profile': update_profile,
         'form': form
         }
     return render(request, 'accounts/detail.html', context)
 
-
+def delete(request, pk):
+    profile = Profile.objects.get(id=pk)
+    if request.method == 'POST':
+        profile.delete()
+        messages.success(request, 'Your account was deleted!')
+        return redirect('/')
+    
+    return render(request, 'accounts/delete.html')
 # def update(request, pk):
 #     profile = Profile.objects.get(id=pk)
 #     form = ProfileForm(request.POST, instance=profile)

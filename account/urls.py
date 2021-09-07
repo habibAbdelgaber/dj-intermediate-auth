@@ -10,8 +10,8 @@ from accounts import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
-    path('profile-detail/', views.detail, name='detail'),
-    path('profile-detail/', views.detail, name='update-profile'),
+    path('profile-detail/<int:pk>/', views.detail, name='detail'),
+    path('profile-detail/<int:pk>/delete/', views.delete, name='delete'),
     # path('accounts/', include('django.contrib.auth.urls')),
     path('signup-view/', views.signup, name='signup'),
     path('password-change-view/', views.password_change, name='password_change'),

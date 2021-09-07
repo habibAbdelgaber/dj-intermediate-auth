@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
 </head>
 
-<body style="font-family: 'Times New Roman', Times, serif; background-color: #fafafa;">
+<body style="font-family: 'Times New Roman', Times, serif; background-color: #fafafa; overflow-x: hidden;">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <!-- <a class="navbar-brand" href="#">Home</a> -->
@@ -39,7 +39,8 @@
                             class="fas fa-sign-in-alt text-primary"></i>&nbsp;Sign
                         up</a>
                     {% else %}
-                    <a class="nav-link" href="{% url 'detail' %}"><i class="fas fa-user text-primary"></i>
+                    <a class="nav-link" href="{% url 'detail' request.user.id %}"><i
+                            class="fas fa-user text-primary"></i>
                         {{request.user.get_username|capfirst}}
                         &nbsp;|</a>
                     <a class="nav-link" href="{% url 'logout' %}"> <i class="fas fa-sign-out-alt text-danger"></i> Sign
@@ -51,19 +52,19 @@
     </nav>
 
     <main style="min-height: 90vh;">
-        <div class="container">
-            <div class="row my-3 justify-content-center">
-                {% if messages %}
-                {% for message in messages %}
-                <div class="col-md-8">
-                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                        <strong>{{ message }}</strong>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
+        <div class="row justify-content-center">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="col-md-12">
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-                {% endfor %}
-                {% endif %}
             </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <div class="container">
             {% block content %}
             {% endblock content %}
         </div>
